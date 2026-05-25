@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#fff9f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ねこみくじ">
+<title>ねこみくじ</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root {
+  --bg: #fff9f4;
+  --surface: #fffcf9;
+  --accent: #e8845a;
+  --accent2: #f7c59f;
+  --text: #3d2b1f;
+  --text-muted: #9e7a65;
+  --radius: 24px;
+  --card-w: min(320px, 88vw);
+  --card-h: min(440px, 70vh);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'Hiragino Maru Gothic ProN', 'M PLUS Rounded 1c', sans-serif;
+  background: var(--bg); color: var(--text);
+  user-select: none; -webkit-user-select: none;
+}
+body {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  background: radial-gradient(circle at 20% 10%, #ffe0cc55 0%, transparent 50%),
+              radial-gradient(circle at 80% 90%, #ffd6b055 0%, transparent 50%), var(--bg);
+}
+header { width: 100%; text-align: center; padding: 20px 0 4px; }
+.logo { display: inline-flex; align-items: center; gap: 8px; }
+.logo-icon { font-size: 26px; line-height: 1; }
+.logo-text { font-size: clamp(22px,5vw,28px); font-weight: 900; letter-spacing: .08em; color: var(--accent); }
+.tagline { font-size: 11px; color: var(--text-muted); margin-top: 3px; letter-spacing: .1em; }
+.date-badge {
+  display: inline-block; font-size: 11px; color: var(--accent);
+  background: rgba(232,132,90,.1); padding: 4px 12px;
+  border-radius: 999px; margin-top: 6px; font-weight: 700; letter-spacing: .05em;
+}
+.game-area {
+  flex: 1; display: flex; align-items: center;
+  justify-content: center; width: 100%; position: relative;
+}
+.card-stack { position: relative; width: var(--card-w); height: var(--card-h); }
+.card-bg {
+  position: absolute; inset: 0; background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(180,120,80,.12);
+  transform: rotate(-4deg) scale(.96) translateY(8px); opacity: .5;
+}
+.card-bg2 {
+  position: absolute; inset: 0; background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(180,120,80,.12);
+  transform: rotate(-2deg) scale(.98) translateY(4px); opacity: .7;
+}
+.card {
+  position: absolute; inset: 0; background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(180,120,80,.18), 0 2px 8px rgba(180,120,80,.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: grab; touch-action: none;
+  border: 1.5px solid rgba(232,132,90,.12);
+  will-change: transform; transition: transform .45s cubic-bezier(.16,1,.3,1);
+}
+.card:active { cursor: grabbing; }
+.card-inner { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 24px; text-align: center; }
+.cat-svg { width: clamp(100px,22vw,130px); height: auto; filter: drop-shadow(0 4px 12px rgba(180,120,80,.2)); transition: transform .15s; }
+.card-title { font-size: clamp(15px,3.5vw,18px); font-weight: 700; color: var(--text); letter-spacing: .05em; }
+.card-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; max-width: 240px; }
+.swipe-label {
+  position: absolute; font-size: 13px; font-weight: 700;
+  padding: 6px 14px; border-radius: 999px; border: 2.5px solid;
+  opacity: 0; top: 24px; pointer-events: none; transition: opacity .1s;
+}
+.swipe-label-left { left: 16px; color: #e8845a; border-color: #e8845a; transform: rotate(-12deg); }
+.swipe-label-right { right: 16px; color: #5a9ee8; border-color: #5a9ee8; transform: rotate(12deg); }
+footer { padding: 0 0 24px; text-align: center; width: 100%; }
+.swipe-guide { display: flex; align-items: center; gap: 12px; justify-content: center; padding: 8px 0; }
+.swipe-arrow { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-muted); font-weight: 700; }
+.swipe-arrow span { font-size: 18px; }
+.guide-sep { width: 1px; height: 16px; background: rgba(0,0,0,.1); }
+.counter { font-size: 11px; color: var(--text-muted); letter-spacing: .05em; }
+.result-screen {
+  position: fixed; inset: 0;
+  background: radial-gradient(circle at 30% 20%, #ffe0cc66 0%, transparent 55%),
+              radial-gradient(circle at 70% 80%, #ffd6b044 0%, transparent 55%), var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 100; opacity: 0; pointer-events: none;
+  transition: opacity .35s cubic-bezier(.16,1,.3,1);
+}
+.result-screen.show { opacity: 1; pointer-events: all; }
+.result-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  padding: 32px 24px; text-align: center;
+  transform: translateY(24px); transition: transform .4s cubic-bezier(.16,1,.3,1);
+}
+.result-screen.show .result-inner { transform: translateY(0); }
+.result-cat-svg { width: clamp(90px,20vw,120px); height: auto; animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes bounceIn { from{transform:scale(.5);opacity:0} to{transform:scale(1);opacity:1} }
+.result-badge {
+  font-size: clamp(36px,10vw,52px); font-weight: 900; letter-spacing: .12em;
+  color: var(--accent); text-shadow: 0 2px 12px rgba(232,132,90,.25);
+}
+.result-line { width: 60px; height: 3px; background: linear-gradient(90deg,transparent,var(--accent2),transparent); border-radius: 999px; }
+.result-title { font-size: clamp(15px,3.5vw,18px); font-weight: 700; color: var(--text); letter-spacing: .05em; }
+.result-msg { font-size: clamp(12px,2.8vw,14px); color: var(--text-muted); line-height: 1.8; max-width: 260px; white-space: pre-line; }
+.result-comment { font-size: 13px; color: var(--accent); font-weight: 700; background: rgba(232,132,90,.1); padding: 8px 20px; border-radius: 999px; }
+.result-daily { font-size: 11px; color: var(--text-muted); background: rgba(0,0,0,.04); padding: 6px 16px; border-radius: 999px; margin-top: -4px; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.btn-retry {
+  background: var(--accent); color: #fff; border: none; border-radius: 999px;
+  padding: 14px 36px; font-size: 15px; font-weight: 700; font-family: inherit;
+  cursor: pointer; letter-spacing: .05em;
+  box-shadow: 0 4px 16px rgba(232,132,90,.35);
+  transition: transform .15s;
+}
+.btn-retry:active { transform: scale(.96); }
+.btn-share {
+  background: #1d9bf0; color: #fff; border: none; border-radius: 999px;
+  padding: 14px 28px; font-size: 15px; font-weight: 700; font-family: inherit;
+  cursor: pointer; letter-spacing: .05em;
+  box-shadow: 0 4px 16px rgba(29,155,240,.35);
+  display: flex; align-items: center; gap: 6px;
+  transition: transform .15s;
+}
+.btn-share:active { transform: scale(.96); }
+.particle-container { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.particle { position: absolute; animation: fall 1.8s ease-in both; opacity: 0; }
+@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(360deg)} }
+.deco-star { position: fixed; font-size: 14px; opacity: .12; animation: twinkle 3s ease-in-out infinite alternate; pointer-events: none; }
+@keyframes twinkle { from{opacity:.08} to{opacity:.18} }
+</style>
+</head>
+<body>
+<div class="deco-star" style="top:8%;left:7%;animation-delay:0s">🌸</div>
+<div class="deco-star" style="top:12%;right:9%;animation-delay:1s">⭐</div>
+<div class="deco-star" style="bottom:20%;left:5%;animation-delay:.5s">🍀</div>
+<div class="deco-star" style="bottom:25%;right:7%;animation-delay:1.5s">✨</div>
+<header>
+  <div class="logo">
+    <span class="logo-icon">🐱</span>
+    <span class="logo-text">ねこみくじ</span>
+    <span class="logo-icon">🐱</span>
+  </div>
+  <p class="tagline">スワイプして今日の運勢を引こう</p>
+  <div class="date-badge" id="dateBadge"></div>
+</header>
+<div class="game-area">
+  <div class="card-stack" id="cardStack">
+    <div class="card-bg"></div>
+    <div class="card-bg2"></div>
+    <div class="card" id="card">
+      <div class="swipe-label swipe-label-left" id="labelLeft">✕</div>
+      <div class="swipe-label swipe-label-right" id="labelRight">♥</div>
+      <div class="card-inner">
+        <svg class="cat-svg" id="catSvg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="18,52 30,18 46,52" fill="#f7c59f"/>
+          <polygon points="23,50 30,24 43,50" fill="#fde9d9"/>
+          <polygon points="74,52 90,18 102,52" fill="#f7c59f"/>
+          <polygon points="77,50 90,24 99,50" fill="#fde9d9"/>
+          <ellipse cx="60" cy="70" rx="42" ry="40" fill="#f7c59f"/>
+          <ellipse cx="44" cy="65" rx="7" ry="8" fill="white"/>
+          <ellipse cx="76" cy="65" rx="7" ry="8" fill="white"/>
+          <ellipse id="eyeL" cx="44" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
+          <ellipse id="eyeR" cx="76" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
+          <circle cx="45.5" cy="64.5" r="1.5" fill="white"/>
+          <circle cx="77.5" cy="64.5" r="1.5" fill="white"/>
+          <ellipse cx="60" cy="76" rx="3" ry="2" fill="#e8845a"/>
+          <path d="M55 80 Q60 85 65 80" stroke="#e8845a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <line x1="20" y1="74" x2="50" y2="77" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="20" y1="79" x2="50" y2="79" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="70" y1="77" x2="100" y2="74" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="70" y1="79" x2="100" y2="79" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <ellipse cx="36" cy="76" rx="6" ry="4" fill="#f4a0a0" opacity=".4"/>
+          <ellipse cx="84" cy="76" rx="6" ry="4" fill="#f4a0a0" opacity=".4"/>
+        </svg>
+        <div class="card-title" id="cardTitle">ねこをスワイプしてね！</div>
+        <div class="card-sub" id="cardSub">左右どちらかにスワイプすると<br>今日の運勢が分かるにゃ🐾</div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="swipe-guide">
+    <div class="swipe-arrow"><span>←</span> スワイプ</div>
+    <div class="guide-sep"></div>
+    <div class="swipe-arrow">スワイプ <span>→</span></div>
+  </div>
+  <div class="counter" id="counter">今日のおみくじ: 0回目</div>
+</footer>
+<div class="result-screen" id="resultScreen">
+  <div class="result-inner">
+    <svg class="result-cat-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="18,52 30,18 46,52" fill="#f7c59f"/>
+      <polygon points="23,50 30,24 43,50" fill="#fde9d9"/>
+      <polygon points="74,52 90,18 102,52" fill="#f7c59f"/>
+      <polygon points="77,50 90,24 99,50" fill="#fde9d9"/>
+      <ellipse cx="60" cy="70" rx="42" ry="40" fill="#f7c59f"/>
+      <ellipse cx="44" cy="65" rx="7" ry="8" fill="white"/>
+      <ellipse cx="76" cy="65" rx="7" ry="8" fill="white"/>
+      <ellipse id="rEyeL" cx="44" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
+      <ellipse id="rEyeR" cx="76" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
+      <circle cx="45.5" cy="64.5" r="1.5" fill="white"/>
+      <circle cx="77.5" cy="64.5" r="1.5" fill="white"/>
+      <ellipse cx="60" cy="76" rx="3" ry="2" fill="#e8845a"/>
+      <path id="rMouth" d="M55 80 Q60 85 65 80" stroke="#e8845a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <line x1="20" y1="74" x2="50" y2="77" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="20" y1="79" x2="50" y2="79" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="70" y1="77" x2="100" y2="74" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="70" y1="79" x2="100" y2="79" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <ellipse cx="36" cy="76" rx="6" ry="4" fill="#f4a0a0" opacity=".4"/>
+      <ellipse cx="84" cy="76" rx="6" ry="4" fill="#f4a0a0" opacity=".4"/>
+    </svg>
+    <div class="result-badge" id="resultBadge">大吉</div>
+    <div class="result-line"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="result-comment" id="resultComment"></div>
+    <div class="result-daily" id="resultDaily"></div>
+    <div class="btn-row">
+      <button class="btn-retry" id="btnRetry">もう一回 🐱</button>
+      <button class="btn-share" id="btnShare">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.626zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Xでシェア
+      </button>
+    </div>
+  </div>
+</div>
+<div class="particle-container" id="particles"></div>
+<script>
+const RESULTS=[
+  {badge:"大吉",title:"今日は最高の一日！",msg:"何事にもチャレンジする勇気が運を呼び込む。\n気になっていたことを思い切ってやってみよう。",comment:"にゃん！最高の運勢だにゃ🐾",daily:"今日のラッキーカラー：ゴールド",particles:["🌟","⭐","✨","🎉","🌸","💛"],weight:1,mouthPath:"M53 79 Q60 86 67 79"},
+  {badge:"中吉",title:"いい流れが来ているよ",msg:"焦らず丁寧に進めれば良い結果が出る。\n大切な人との時間が運気を上げてくれる。",comment:"まあまあ良い日だにゃ🐾",daily:"今日のラッキーカラー：ピンク",particles:["🌸","💫","🍀","✨"],weight:2,mouthPath:"M54 80 Q60 86 66 80"},
+  {badge:"小吉",title:"小さな幸せを見つけよう",msg:"いつもより少しだけ周りに目を向けてみて。\n小さな気づきが今日の宝物になるかも。",comment:"ちょっぴり良い日だにゃ🐾",daily:"今日のラッキーカラー：グリーン",particles:["🍀","🌿","💚","🌱"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
+  {badge:"吉",title:"穏やかな一日になりそう",msg:"無理をせず、自分のペースで過ごすのが吉。\nいつもの行動が良い縁を運んでくる。",comment:"普通の日も悪くないにゃ🐾",daily:"今日のラッキーカラー：イエロー",particles:["🌼","💛","☀️","🌻"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
+  {badge:"末吉",title:"ゆっくり準備を整えよう",msg:"今は焦らず、内側を整える時期。\n基礎を固めることが後の大きな花につながる。",comment:"今日はゆっくりにゃ🐾",daily:"今日のラッキーカラー：ラベンダー",particles:["🌙","💤","⭐","🌧️"],weight:1,mouthPath:"M56 82 Q60 79 64 82"}
+];
+function getResult(){const pool=[];RESULTS.forEach((r,i)=>{for(let w=0;w<r.weight;w++)pool.push(i);});return RESULTS[pool[Math.floor(Math.random()*pool.length)]];}
+const now=new Date();
+const dateStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+document.getElementById('dateBadge').textContent=dateStr+' のおみくじ';
+const COUNT_KEY='neko_count_'+now.toDateString();
+const DAILY_RESULT_KEY='neko_daily_'+now.toDateString();
+const DAILY_LIMIT=3;
+let count=parseInt(localStorage.getItem(COUNT_KEY)||'0');
+document.getElementById('counter').textContent=`今日のおみくじ: ${count}回目`;
+if(count>=DAILY_LIMIT){document.getElementById('cardTitle').textContent='また明日来てにゃ🐾';document.getElementById('cardSub').textContent=`おみくじは1日${DAILY_LIMIT}回まで。\nまた明日！`;}
+let startX=0,startY=0,curX=0,isDragging=false;
+const card=document.getElementById('card');
+const eyeL=document.getElementById('eyeL');
+const eyeR=document.getElementById('eyeR');
+const labelLeft=document.getElementById('labelLeft');
+const labelRight=document.getElementById('labelRight');
+const counter=document.getElementById('counter');
+const resultScreen=document.getElementById('resultScreen');
+const SWIPE_THRESHOLD=80;
+card.addEventListener('touchstart',onStart,{passive:true});
+card.addEventListener('touchmove',onMove,{passive:true});
+card.addEventListener('touchend',onEnd);
+card.addEventListener('mousedown',onStart);
+window.addEventListener('mousemove',e=>{if(isDragging)onMove(e);});
+window.addEventListener('mouseup',e=>{if(isDragging)onEnd(e);});
+function getClientX(e){return e.touches?e.touches[0].clientX:e.clientX;}
+function getClientY(e){return e.touches?e.touches[0].clientY:e.clientY;}
+function onStart(e){if(count>=DAILY_LIMIT)return;isDragging=true;startX=getClientX(e);startY=getClientY(e);curX=0;card.style.transition='none';}
+function onMove(e){
+  if(!isDragging)return;
+  const dx=getClientX(e)-startX,dy=getClientY(e)-startY;
+  if(Math.abs(dy)>Math.abs(dx)*1.5)return;
+  curX=dx;
+  card.style.transform=`translateX(${dx}px) rotate(${dx*0.08}deg) translateY(-${Math.min(Math.abs(dx)*0.04,6)}px)`;
+  labelLeft.style.opacity=dx<-20?Math.min((Math.abs(dx)-20)/40,1):0;
+  labelRight.style.opacity=dx>20?Math.min((dx-20)/40,1):0;
+  const ratio=Math.min(Math.abs(dx)/100,1);
+  if(dx>40){eyeL.setAttribute('ry',5-ratio*3);eyeR.setAttribute('ry',5-ratio*3);}
+  else if(dx<-40){eyeL.setAttribute('ry',2+ratio*1);eyeR.setAttribute('ry',2+ratio*1);}
+  else{eyeL.setAttribute('ry',5);eyeR.setAttribute('ry',5);}
+}
+function onEnd(e){
+  if(!isDragging)return;
+  isDragging=false;
+  eyeL.setAttribute('ry',5);eyeR.setAttribute('ry',5);
+  labelLeft.style.opacity=0;labelRight.style.opacity=0;
+  card.style.transition='transform .45s cubic-bezier(.16,1,.3,1)';
+  if(Math.abs(curX)>=SWIPE_THRESHOLD){
+    const dir=curX>0?1:-1;
+    card.style.transform=`translateX(${dir*110}vw) rotate(${dir*25}deg)`;
+    setTimeout(()=>showResult(),300);
+  }else{card.style.transform='translateX(0) rotate(0deg) translateY(0)';}
+}
+function showResult(){
+  let r;
+  const stored=localStorage.getItem(DAILY_RESULT_KEY);
+  if(stored){r=JSON.parse(stored);}else{r=getResult();localStorage.setItem(DAILY_RESULT_KEY,JSON.stringify(r));}
+  count++;localStorage.setItem(COUNT_KEY,count);
+  counter.textContent=`今日のおみくじ: ${count}回目`;
+  document.getElementById('resultBadge').textContent=r.badge;
+  document.getElementById('resultTitle').textContent=r.title;
+  document.getElementById('resultMsg').textContent=r.msg;
+  document.getElementById('resultComment').textContent=r.comment;
+  document.getElementById('resultDaily').textContent=r.daily;
+  document.getElementById('rMouth').setAttribute('d',r.mouthPath||"M55 80 Q60 85 65 80");
+  const ry=r.badge==='末吉'?3.5:5;
+  document.getElementById('rEyeL').setAttribute('ry',ry);
+  document.getElementById('rEyeR').setAttribute('ry',ry);
+  resultScreen.classList.add('show');
+  setTimeout(()=>launchParticles(r.particles),100);
+  if(count>=DAILY_LIMIT){document.getElementById('btnRetry').textContent='また明日ね 🐱';}
+}
+function launchParticles(emojis){
+  const pc=document.getElementById('particles');pc.innerHTML='';
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'vw';p.style.top='-30px';
+    p.style.animationDelay=(Math.random()*.8)+'s';
+    p.style.animationDuration=(1.4+Math.random()*.8)+'s';
+    p.style.fontSize=(14+Math.random()*16)+'px';
+    pc.appendChild(p);
+  }
+  setTimeout(()=>{pc.innerHTML='';},3000);
+}
+document.getElementById('btnRetry').addEventListener('click',()=>{
+  if(count>=DAILY_LIMIT){resultScreen.classList.remove('show');return;}
+  resultScreen.classList.remove('show');
+  card.style.transition='none';
+  card.style.transform='translateX(0) rotate(0deg) translateY(0)';
+  eyeL.setAttribute('ry',5);eyeR.setAttribute('ry',5);
+  setTimeout(()=>{card.style.transition='transform .45s cubic-bezier(.16,1,.3,1)';},50);
+});
+document.getElementById('btnShare').addEventListener('click',()=>{
+  const badge=document.getElementById('resultBadge').textContent;
+  const title=document.getElementById('resultTitle').textContent;
+  const text=`🐱 ねこみくじ結果\n${dateStr}の運勢：【${badge}】\n${title}\n#ねこみくじ #おみくじ`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`,'_blank');
+});
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js')
+    .then(()=>console.log('SW registered'))
+    .catch(e=>console.log('SW error',e));
+}
+</script>
+</body>
+</html>
