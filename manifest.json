@@ -1,0 +1,16 @@
+{
+  "name": "ねこみくじ",
+  "short_name": "ねこみくじ",
+  "description": "スワイプして今日の運勢を引こう！猫のゆるかわおみくじゲーム",
+  "start_url": "./nekomikuji.html",
+  "display": "standalone",
+  "background_color": "#fff9f4",
+  "theme_color": "#e8845a",
+  "orientation": "portrait",
+  "lang": "ja",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
