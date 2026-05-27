@@ -24,153 +24,78 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #fff9f4;
-  --surface: #fffcf9;
-  --accent: #e8845a;
-  --accent2: #f7c59f;
-  --text: #3d2b1f;
-  --text-muted: #9e7a65;
-  --radius: 24px;
-  --card-w: min(320px, 88vw);
-  --card-h: min(440px, 70vh);
+:root{
+  --bg:#fff9f4;--surface:#fffcf9;--accent:#e8845a;--accent2:#f7c59f;
+  --text:#3d2b1f;--text-muted:#9e7a65;--radius:24px;
+  --card-w:min(320px,88vw);--card-h:min(440px,70vh);
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  height: 100%; overflow: hidden;
-  font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', sans-serif;
-  background: var(--bg); color: var(--text);
-  user-select: none; -webkit-user-select: none;
-}
-body {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  padding: 0 16px;
-  background: radial-gradient(circle at 20% 10%, #ffe0cc55 0%, transparent 50%),
-              radial-gradient(circle at 80% 90%, #ffd6b055 0%, transparent 50%), var(--bg);
-}
-header { width: 100%; text-align: center; padding: 20px 0 4px; }
-.logo { display: inline-flex; align-items: center; gap: 8px; }
-.logo-icon { font-size: 26px; line-height: 1; }
-.logo-text { font-size: clamp(22px,5vw,28px); font-weight: 900; letter-spacing: .08em; color: var(--accent); }
-.tagline { font-size: 11px; color: var(--text-muted); margin-top: 3px; letter-spacing: .1em; }
-.date-badge {
-  display: inline-block; font-size: 11px; color: var(--accent);
-  background: rgba(232,132,90,.1); padding: 4px 12px;
-  border-radius: 999px; margin-top: 6px; font-weight: 700; letter-spacing: .05em;
-}
-.game-area {
-  flex: 1; display: flex; align-items: center;
-  justify-content: center; width: 100%; position: relative;
-}
-.card-stack { position: relative; width: var(--card-w); height: var(--card-h); }
-.card-bg {
-  position: absolute; inset: 0;
-  background: url('assets/img/neko_card.png') center/cover no-repeat, var(--surface);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(180,120,80,.12);
-  transform: rotate(-4deg) scale(.96) translateY(8px); opacity: .45;
-}
-.card-bg2 {
-  position: absolute; inset: 0;
-  background: url('assets/img/neko_card.png') center/cover no-repeat, var(--surface);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(180,120,80,.12);
-  transform: rotate(-2deg) scale(.98) translateY(4px); opacity: .65;
-}
-.card {
-  position: absolute; inset: 0;
-  background: url('assets/img/neko_card.png') center/cover no-repeat, var(--surface);
-  border-radius: var(--radius);
-  box-shadow: 0 12px 40px rgba(180,120,80,.18), 0 2px 8px rgba(180,120,80,.1);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  cursor: grab; touch-action: none;
-  border: 1.5px solid rgba(232,132,90,.2);
-  will-change: transform; transition: transform .45s cubic-bezier(.16,1,.3,1);
-  overflow: hidden;
-}
-.card::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255,249,244,.15) 0%, rgba(255,249,244,.72) 40%, rgba(255,249,244,.92) 100%);
-  border-radius: var(--radius); pointer-events: none;
-}
-.card:active { cursor: grabbing; }
-.card-inner {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 24px; text-align: center;
-}
-.cat-svg { width: clamp(100px,22vw,130px); height: auto; filter: drop-shadow(0 4px 12px rgba(180,120,80,.25)); transition: transform .15s; }
-.card-title { font-size: clamp(15px,3.5vw,18px); font-weight: 900; color: var(--text); letter-spacing: .05em; }
-.card-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; max-width: 240px; font-weight: 700; }
-.swipe-label {
-  position: absolute; font-size: 13px; font-weight: 900;
-  padding: 6px 14px; border-radius: 999px; border: 2.5px solid;
-  opacity: 0; top: 24px; pointer-events: none; transition: opacity .1s; z-index: 2;
-}
-.swipe-label-left { left: 16px; color: #e8845a; border-color: #e8845a; transform: rotate(-12deg); background: rgba(255,255,255,.8); }
-.swipe-label-right { right: 16px; color: #5a9ee8; border-color: #5a9ee8; transform: rotate(12deg); background: rgba(255,255,255,.8); }
-footer { padding: 0 0 24px; text-align: center; width: 100%; }
-.swipe-guide { display: flex; align-items: center; gap: 12px; justify-content: center; padding: 8px 0; }
-.swipe-arrow { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-muted); font-weight: 700; }
-.swipe-arrow span { font-size: 18px; }
-.guide-sep { width: 1px; height: 16px; background: rgba(0,0,0,.1); }
-.counter { font-size: 11px; color: var(--text-muted); letter-spacing: .05em; }
-.result-screen {
-  position: fixed; inset: 0;
-  background: radial-gradient(circle at 30% 20%, #ffe0cc66 0%, transparent 55%),
-              radial-gradient(circle at 70% 80%, #ffd6b044 0%, transparent 55%), var(--bg);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 100; opacity: 0; pointer-events: none;
-  transition: opacity .35s cubic-bezier(.16,1,.3,1);
-}
-.result-screen.show { opacity: 1; pointer-events: all; }
-.result-inner {
-  display: flex; flex-direction: column; align-items: center; gap: 16px;
-  padding: 32px 24px; text-align: center;
-  transform: translateY(24px); transition: transform .4s cubic-bezier(.16,1,.3,1);
-}
-.result-screen.show .result-inner { transform: translateY(0); }
-.result-cat-img {
-  width: clamp(90px,20vw,120px); height: clamp(90px,20vw,120px);
-  object-fit: cover; border-radius: 50%;
-  box-shadow: 0 4px 20px rgba(180,120,80,.2);
-  animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1) both;
-  border: 3px solid var(--accent2);
-}
-.result-cat-svg { width: clamp(90px,20vw,120px); height: auto; animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1) both; }
-@keyframes bounceIn { from{transform:scale(.5);opacity:0} to{transform:scale(1);opacity:1} }
-.result-badge {
-  font-size: clamp(36px,10vw,52px); font-weight: 900; letter-spacing: .12em;
-  color: var(--accent); text-shadow: 0 2px 12px rgba(232,132,90,.25);
-}
-.result-line { width: 60px; height: 3px; background: linear-gradient(90deg,transparent,var(--accent2),transparent); border-radius: 999px; }
-.result-title { font-size: clamp(15px,3.5vw,18px); font-weight: 900; color: var(--text); letter-spacing: .05em; }
-.result-msg { font-size: clamp(12px,2.8vw,14px); color: var(--text-muted); line-height: 1.8; max-width: 260px; white-space: pre-line; }
-.result-comment { font-size: 13px; color: var(--accent); font-weight: 700; background: rgba(232,132,90,.1); padding: 8px 20px; border-radius: 999px; }
-.result-daily { font-size: 11px; color: var(--text-muted); background: rgba(0,0,0,.04); padding: 6px 16px; border-radius: 999px; margin-top: -4px; }
-.btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
-.btn-retry {
-  background: var(--accent); color: #fff; border: none; border-radius: 999px;
-  padding: 14px 36px; font-size: 15px; font-weight: 900; font-family: inherit;
-  cursor: pointer; letter-spacing: .05em;
-  box-shadow: 0 4px 16px rgba(232,132,90,.35);
-  transition: transform .15s;
-}
-.btn-retry:active { transform: scale(.96); }
-.btn-share {
-  background: #1d9bf0; color: #fff; border: none; border-radius: 999px;
-  padding: 14px 28px; font-size: 15px; font-weight: 900; font-family: inherit;
-  cursor: pointer; letter-spacing: .05em;
-  box-shadow: 0 4px 16px rgba(29,155,240,.35);
-  display: flex; align-items: center; gap: 6px;
-  transition: transform .15s;
-}
-.btn-share:active { transform: scale(.96); }
-.particle-container { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
-.particle { position: absolute; animation: fall 1.8s ease-in both; opacity: 0; }
-@keyframes fall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(360deg)} }
-.deco-star { position: fixed; font-size: 14px; opacity: .12; animation: twinkle 3s ease-in-out infinite alternate; pointer-events: none; }
-@keyframes twinkle { from{opacity:.08} to{opacity:.18} }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;font-family:'M PLUS Rounded 1c','Hiragino Maru Gothic ProN',sans-serif;background:var(--bg);color:var(--text);user-select:none;-webkit-user-select:none;}
+body{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:0 16px;
+  background:radial-gradient(circle at 20% 10%,#ffe0cc55 0%,transparent 50%),radial-gradient(circle at 80% 90%,#ffd6b055 0%,transparent 50%),var(--bg);}
+header{width:100%;text-align:center;padding:20px 0 4px;}
+.logo{display:inline-flex;align-items:center;gap:8px;}
+.logo-icon{font-size:26px;line-height:1;}
+.logo-text{font-size:clamp(22px,5vw,28px);font-weight:900;letter-spacing:.08em;color:var(--accent);}
+.tagline{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.1em;}
+.date-badge{display:inline-block;font-size:11px;color:var(--accent);background:rgba(232,132,90,.1);padding:4px 12px;border-radius:999px;margin-top:6px;font-weight:700;letter-spacing:.05em;}
+.game-area{flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;}
+.card-stack{position:relative;width:var(--card-w);height:var(--card-h);}
+.card-bg{position:absolute;inset:0;background:url('assets/img/neko_card.png') center/cover no-repeat,var(--surface);border-radius:var(--radius);box-shadow:0 8px 32px rgba(180,120,80,.12);transform:rotate(-4deg) scale(.96) translateY(8px);opacity:.45;}
+.card-bg2{position:absolute;inset:0;background:url('assets/img/neko_card.png') center/cover no-repeat,var(--surface);border-radius:var(--radius);box-shadow:0 8px 32px rgba(180,120,80,.12);transform:rotate(-2deg) scale(.98) translateY(4px);opacity:.65;}
+.card{position:absolute;inset:0;background:url('assets/img/neko_card.png') center/cover no-repeat,var(--surface);border-radius:var(--radius);box-shadow:0 12px 40px rgba(180,120,80,.18),0 2px 8px rgba(180,120,80,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;touch-action:none;border:1.5px solid rgba(232,132,90,.2);will-change:transform;transition:transform .45s cubic-bezier(.16,1,.3,1);overflow:hidden;}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,249,244,.15) 0%,rgba(255,249,244,.72) 40%,rgba(255,249,244,.92) 100%);border-radius:var(--radius);pointer-events:none;}
+.card:active{cursor:grabbing;}
+.card-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px;text-align:center;}
+.cat-svg{width:clamp(100px,22vw,130px);height:auto;filter:drop-shadow(0 4px 12px rgba(180,120,80,.25));transition:transform .15s;}
+.card-title{font-size:clamp(15px,3.5vw,18px);font-weight:900;color:var(--text);letter-spacing:.05em;}
+.card-sub{font-size:12px;color:var(--text-muted);line-height:1.6;max-width:240px;font-weight:700;}
+.swipe-label{position:absolute;font-size:13px;font-weight:900;padding:6px 14px;border-radius:999px;border:2.5px solid;opacity:0;top:24px;pointer-events:none;transition:opacity .1s;z-index:2;}
+.swipe-label-left{left:16px;color:#e8845a;border-color:#e8845a;transform:rotate(-12deg);background:rgba(255,255,255,.85);}
+.swipe-label-right{right:16px;color:#5a9ee8;border-color:#5a9ee8;transform:rotate(12deg);background:rgba(255,255,255,.85);}
+footer{padding:0 0 24px;text-align:center;width:100%;}
+.swipe-guide{display:flex;align-items:center;gap:12px;justify-content:center;padding:8px 0;}
+.swipe-arrow{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-muted);font-weight:700;}
+.swipe-arrow span{font-size:18px;}
+.guide-sep{width:1px;height:16px;background:rgba(0,0,0,.1);}
+.counter{font-size:11px;color:var(--text-muted);letter-spacing:.05em;}
+/* Tutorial */
+.tutorial-overlay{position:fixed;inset:0;background:rgba(40,20,10,.72);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .35s;}
+.tutorial-overlay.show{opacity:1;pointer-events:all;}
+.tutorial-box{background:var(--surface);border-radius:28px;padding:32px 24px;max-width:300px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.tutorial-icon{font-size:52px;margin-bottom:8px;}
+.tutorial-title{font-size:20px;font-weight:900;color:var(--accent);margin-bottom:12px;}
+.tutorial-steps{list-style:none;text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.tutorial-steps li{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.6;color:var(--text);}
+.tutorial-steps li .step-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.btn-tutorial-start{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 40px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(232,132,90,.4);letter-spacing:.05em;transition:transform .15s;}
+.btn-tutorial-start:active{transform:scale(.96);}
+/* Result */
+.result-screen{position:fixed;inset:0;background:radial-gradient(circle at 30% 20%,#ffe0cc66 0%,transparent 55%),radial-gradient(circle at 70% 80%,#ffd6b044 0%,transparent 55%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.16,1,.3,1);}
+.result-screen.show{opacity:1;pointer-events:all;}
+.result-inner{display:flex;flex-direction:column;align-items:center;gap:12px;padding:28px 24px;text-align:center;transform:translateY(24px);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.result-screen.show .result-inner{transform:translateY(0);}
+.result-cat-img{width:clamp(80px,18vw,110px);height:clamp(80px,18vw,110px);object-fit:cover;border-radius:50%;box-shadow:0 4px 20px rgba(180,120,80,.2);animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1) both;border:3px solid var(--accent2);}
+.result-cat-svg{width:clamp(80px,18vw,110px);height:auto;animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes bounceIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.result-badge{font-size:clamp(36px,10vw,52px);font-weight:900;letter-spacing:.12em;color:var(--accent);text-shadow:0 2px 12px rgba(232,132,90,.25);}
+.result-line{width:60px;height:3px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);border-radius:999px;}
+.result-title{font-size:clamp(15px,3.5vw,18px);font-weight:900;color:var(--text);letter-spacing:.05em;}
+.result-msg{font-size:clamp(12px,2.8vw,13px);color:var(--text-muted);line-height:1.8;max-width:260px;white-space:pre-line;}
+.result-lucky-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:260px;}
+.lucky-item{background:rgba(232,132,90,.08);border-radius:12px;padding:8px 10px;font-size:11px;color:var(--text-muted);text-align:center;line-height:1.5;}
+.lucky-item strong{display:block;font-size:13px;font-weight:900;color:var(--accent);margin-top:2px;}
+.result-comment{font-size:13px;color:var(--accent);font-weight:700;background:rgba(232,132,90,.1);padding:8px 20px;border-radius:999px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 36px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(232,132,90,.35);transition:transform .15s;}
+.btn-retry:active{transform:scale(.96);}
+.btn-share{background:#1d9bf0;color:#fff;border:none;border-radius:999px;padding:14px 28px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(29,155,240,.35);display:flex;align-items:center;gap:6px;transition:transform .15s;}
+.btn-share:active{transform:scale(.96);}
+.particle-container{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden;}
+.particle{position:absolute;animation:fall 1.8s ease-in both;opacity:0;}
+@keyframes fall{0%{opacity:1;transform:translateY(-20px) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(360deg)}}
+.deco-star{position:fixed;font-size:14px;opacity:.12;animation:twinkle 3s ease-in-out infinite alternate;pointer-events:none;}
+@keyframes twinkle{from{opacity:.08}to{opacity:.18}}
 </style>
 </head>
 <body>
@@ -178,6 +103,22 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
 <div class="deco-star" style="top:12%;right:9%;animation-delay:1s">⭐</div>
 <div class="deco-star" style="bottom:20%;left:5%;animation-delay:.5s">🍀</div>
 <div class="deco-star" style="bottom:25%;right:7%;animation-delay:1.5s">✨</div>
+
+<!-- Tutorial -->
+<div class="tutorial-overlay" id="tutorialOverlay">
+  <div class="tutorial-box">
+    <div class="tutorial-icon">🐱</div>
+    <div class="tutorial-title">ねこみくじの遊び方</div>
+    <ul class="tutorial-steps">
+      <li><span class="step-icon">🐾</span><span>猫カードを左右にスワイプするだけ！</span></li>
+      <li><span class="step-icon">🍀</span><span>大吉・中吉・小吉・吉・末吉の5種類から今日の運勢が分かるにゃ</span></li>
+      <li><span class="step-icon">📅</span><span>結果は1日同じ。自分の運勢を熱くシェアしてね！</span></li>
+      <li><span class="step-icon">🔁</span><span>1日3回まで引けるよ。また明日も来てね🐾</span></li>
+    </ul>
+    <button class="btn-tutorial-start" id="btnTutorialStart">はじめる 🐱</button>
+  </div>
+</div>
+
 <header>
   <div class="logo">
     <span class="logo-icon">🐱</span>
@@ -187,6 +128,7 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
   <p class="tagline">スワイプして今日の運勢を引こう</p>
   <div class="date-badge" id="dateBadge"></div>
 </header>
+
 <div class="game-area">
   <div class="card-stack" id="cardStack">
     <div class="card-bg"></div>
@@ -196,17 +138,13 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
       <div class="swipe-label swipe-label-right" id="labelRight">♥</div>
       <div class="card-inner">
         <svg class="cat-svg" id="catSvg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="18,52 30,18 46,52" fill="#f7c59f"/>
-          <polygon points="23,50 30,24 43,50" fill="#fde9d9"/>
-          <polygon points="74,52 90,18 102,52" fill="#f7c59f"/>
-          <polygon points="77,50 90,24 99,50" fill="#fde9d9"/>
+          <polygon points="18,52 30,18 46,52" fill="#f7c59f"/><polygon points="23,50 30,24 43,50" fill="#fde9d9"/>
+          <polygon points="74,52 90,18 102,52" fill="#f7c59f"/><polygon points="77,50 90,24 99,50" fill="#fde9d9"/>
           <ellipse cx="60" cy="70" rx="42" ry="40" fill="#f7c59f"/>
-          <ellipse cx="44" cy="65" rx="7" ry="8" fill="white"/>
-          <ellipse cx="76" cy="65" rx="7" ry="8" fill="white"/>
+          <ellipse cx="44" cy="65" rx="7" ry="8" fill="white"/><ellipse cx="76" cy="65" rx="7" ry="8" fill="white"/>
           <ellipse id="eyeL" cx="44" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
           <ellipse id="eyeR" cx="76" cy="66" rx="4.5" ry="5" fill="#3d2b1f"/>
-          <circle cx="45.5" cy="64.5" r="1.5" fill="white"/>
-          <circle cx="77.5" cy="64.5" r="1.5" fill="white"/>
+          <circle cx="45.5" cy="64.5" r="1.5" fill="white"/><circle cx="77.5" cy="64.5" r="1.5" fill="white"/>
           <ellipse cx="60" cy="76" rx="3" ry="2" fill="#e8845a"/>
           <path d="M55 80 Q60 85 65 80" stroke="#e8845a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
           <line x1="20" y1="74" x2="50" y2="77" stroke="#c9956a" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
@@ -222,6 +160,7 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
     </div>
   </div>
 </div>
+
 <footer>
   <div class="swipe-guide">
     <div class="swipe-arrow"><span>←</span> スワイプ</div>
@@ -230,9 +169,12 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
   </div>
   <div class="counter" id="counter">今日のおみくじ: 0回目</div>
 </footer>
+
+<!-- Result -->
 <div class="result-screen" id="resultScreen">
   <div class="result-inner">
-    <img class="result-cat-img" src="assets/img/neko_card.png" alt="ねこ" onerror="this.style.display='none';document.getElementById('resultCatSvgFallback').style.display='block'">
+    <img class="result-cat-img" src="assets/img/neko_card.png" alt="ねこ"
+      onerror="this.style.display='none';document.getElementById('resultCatSvgFallback').style.display='block'">
     <svg id="resultCatSvgFallback" class="result-cat-svg" style="display:none" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <polygon points="18,52 30,18 46,52" fill="#f7c59f"/><polygon points="23,50 30,24 43,50" fill="#fde9d9"/>
       <polygon points="74,52 90,18 102,52" fill="#f7c59f"/><polygon points="77,50 90,24 99,50" fill="#fde9d9"/>
@@ -250,8 +192,13 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
     <div class="result-line"></div>
     <div class="result-title" id="resultTitle"></div>
     <div class="result-msg" id="resultMsg"></div>
+    <div class="result-lucky-grid" id="resultLuckyGrid">
+      <div class="lucky-item">🎨 カラー<strong id="luckyColor"></strong></div>
+      <div class="lucky-item">🔢 ナンバー<strong id="luckyNumber"></strong></div>
+      <div class="lucky-item">🧇 アイテム<strong id="luckyItem"></strong></div>
+      <div class="lucky-item">🧭 方向<strong id="luckyDir"></strong></div>
+    </div>
     <div class="result-comment" id="resultComment"></div>
-    <div class="result-daily" id="resultDaily"></div>
     <div class="btn-row">
       <button class="btn-retry" id="btnRetry">もう一回 🐱</button>
       <button class="btn-share" id="btnShare">
@@ -261,25 +208,69 @@ footer { padding: 0 0 24px; text-align: center; width: 100%; }
     </div>
   </div>
 </div>
+
 <div class="particle-container" id="particles"></div>
+
 <script>
 const RESULTS=[
-  {badge:"大吉",title:"今日は最高の一日！",msg:"何事にもチャレンジする勇気が運を呼び込む。\n気になっていたことを思い切ってやってみよう。",comment:"にゃん！最高の運勢だにゃ🐾",daily:"今日のラッキーカラー：ゴールド",particles:["🌟","⭐","✨","🎉","🌸","💛"],weight:1,mouthPath:"M53 79 Q60 86 67 79"},
-  {badge:"中吉",title:"いい流れが来ているよ",msg:"焦らず丁寧に進めれば良い結果が出る。\n大切な人との時間が運気を上げてくれる。",comment:"まあまあ良い日だにゃ🐾",daily:"今日のラッキーカラー：ピンク",particles:["🌸","💫","🍀","✨"],weight:2,mouthPath:"M54 80 Q60 86 66 80"},
-  {badge:"小吉",title:"小さな幸せを見つけよう",msg:"いつもより少しだけ周りに目を向けてみて。\n小さな気づきが今日の宝物になるかも。",comment:"ちょっぴり良い日だにゃ🐾",daily:"今日のラッキーカラー：グリーン",particles:["🍀","🌿","💚","🌱"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
-  {badge:"吉",title:"穏やかな一日になりそう",msg:"無理をせず、自分のペースで過ごすのが吉。\nいつもの行動が良い縁を運んでくる。",comment:"普通の日も悪くないにゃ🐾",daily:"今日のラッキーカラー：イエロー",particles:["🌼","💛","☀️","🌻"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
-  {badge:"末吉",title:"ゆっくり準備を整えよう",msg:"今は焦らず、内側を整える時期。\n基礎を固めることが後の大きな花につながる。",comment:"今日はゆっくりにゃ🐾",daily:"今日のラッキーカラー：ラベンダー",particles:["🌙","💤","⭐","🌧️"],weight:1,mouthPath:"M56 82 Q60 79 64 82"}
+  {badge:"大吉",title:"今日は最高の一日！",
+   msg:"何事にもチャレンジする勇気が運を呼び込む。\n気になっていたことを思い切ってやってみよう。",
+   comment:"にゃん！最高の運勢だにゃ🐾",
+   color:"ゴールド",number:"7",item:"黄色い花",dir:"南",
+   particles:["🌟","⭐","✨","🎉","🌸","💛"],weight:1,mouthPath:"M53 79 Q60 86 67 79"},
+  {badge:"中吉",title:"いい流れが来ているよ",
+   msg:"焦らず丁寧に進めれば良い結果が出る。\n大切な人との時間が運気を上げてくれる。",
+   comment:"まあまあ良い日だにゃ🐾",
+   color:"ピンク",number:"3",item:"マグカップ",dir:"東",
+   particles:["🌸","💫","🍀","✨"],weight:2,mouthPath:"M54 80 Q60 86 66 80"},
+  {badge:"小吉",title:"小さな幸せを見つけよう",
+   msg:"いつもより少しだけ周りに目を向けてみて。\n小さな気づきが今日の宝物になるかも。",
+   comment:"ちょっぴり良い日だにゃ🐾",
+   color:"グリーン",number:"5",item:"辛いもの",dir:"北",
+   particles:["🍀","🌿","💚","🌱"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
+  {badge:"吉",title:"穏やかな一日になりそう",
+   msg:"無理をせず、自分のペースで過ごすのが吉。\nいつもの行動が良い縁を運んでくる。",
+   comment:"普通の日も悪くないにゃ🐾",
+   color:"イエロー",number:"1",item:"まるいもの",dir:"西",
+   particles:["🌼","💛","☀️","🌻"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
+  {badge:"末吉",title:"ゆっくり準備を整えよう",
+   msg:"今は焦らず、内側を整える時期。\n基礎を固めることが後の大きな花につながる。",
+   comment:"今日はゆっくりにゃ🐾",
+   color:"ラベンダー",number:"9",item:"水",dir:"上",
+   particles:["🌙","💤","⭐","🌧️"],weight:1,mouthPath:"M56 82 Q60 79 64 82"}
 ];
-function getResult(){const pool=[];RESULTS.forEach((r,i)=>{for(let w=0;w<r.weight;w++)pool.push(i);});return RESULTS[pool[Math.floor(Math.random()*pool.length)]];}
+
+function getResult(){
+  const pool=[];RESULTS.forEach((r,i)=>{for(let w=0;w<r.weight;w++)pool.push(i);});
+  return RESULTS[pool[Math.floor(Math.random()*pool.length)]];
+}
+
 const now=new Date();
 const dateStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
 document.getElementById('dateBadge').textContent=dateStr+' のおみくじ';
+
 const COUNT_KEY='neko_count_'+now.toDateString();
 const DAILY_RESULT_KEY='neko_daily_'+now.toDateString();
+const TUTORIAL_KEY='neko_tutorial_done';
 const DAILY_LIMIT=3;
 let count=parseInt(localStorage.getItem(COUNT_KEY)||'0');
 document.getElementById('counter').textContent=`今日のおみくじ: ${count}回目`;
-if(count>=DAILY_LIMIT){document.getElementById('cardTitle').textContent='また明日来てにゃ🐾';document.getElementById('cardSub').textContent=`おみくじは1日${DAILY_LIMIT}回まで。\nまた明日！`;}
+if(count>=DAILY_LIMIT){
+  document.getElementById('cardTitle').textContent='また明日来てにゃ🐾';
+  document.getElementById('cardSub').textContent=`おみくじは1日${DAILY_LIMIT}回まで。\nまた明日！`;
+}
+
+// Tutorial: show only first visit
+const tutorialOverlay=document.getElementById('tutorialOverlay');
+if(!localStorage.getItem(TUTORIAL_KEY)){
+  tutorialOverlay.classList.add('show');
+}
+document.getElementById('btnTutorialStart').addEventListener('click',()=>{
+  localStorage.setItem(TUTORIAL_KEY,'1');
+  tutorialOverlay.classList.remove('show');
+});
+
+// Swipe
 let startX=0,startY=0,curX=0,isDragging=false;
 const card=document.getElementById('card');
 const eyeL=document.getElementById('eyeL');
@@ -288,7 +279,10 @@ const labelLeft=document.getElementById('labelLeft');
 const labelRight=document.getElementById('labelRight');
 const counter=document.getElementById('counter');
 const resultScreen=document.getElementById('resultScreen');
-const SWIPE_THRESHOLD=80;
+
+// 動的スワイプ閾値: 画面幅の約20%（最小50px、最大100px）
+const SWIPE_THRESHOLD=Math.min(Math.max(window.innerWidth*0.2,50),100);
+
 card.addEventListener('touchstart',onStart,{passive:true});
 card.addEventListener('touchmove',onMove,{passive:true});
 card.addEventListener('touchend',onEnd);
@@ -297,7 +291,11 @@ window.addEventListener('mousemove',e=>{if(isDragging)onMove(e);});
 window.addEventListener('mouseup',e=>{if(isDragging)onEnd(e);});
 function getClientX(e){return e.touches?e.touches[0].clientX:e.clientX;}
 function getClientY(e){return e.touches?e.touches[0].clientY:e.clientY;}
-function onStart(e){if(count>=DAILY_LIMIT)return;isDragging=true;startX=getClientX(e);startY=getClientY(e);curX=0;card.style.transition='none';}
+function onStart(e){
+  if(count>=DAILY_LIMIT)return;
+  isDragging=true;startX=getClientX(e);startY=getClientY(e);curX=0;
+  card.style.transition='none';
+}
 function onMove(e){
   if(!isDragging)return;
   const dx=getClientX(e)-startX,dy=getClientY(e)-startY;
@@ -308,7 +306,7 @@ function onMove(e){
   labelRight.style.opacity=dx>20?Math.min((dx-20)/40,1):0;
   const ratio=Math.min(Math.abs(dx)/100,1);
   if(dx>40){eyeL.setAttribute('ry',5-ratio*3);eyeR.setAttribute('ry',5-ratio*3);}
-  else if(dx<-40){eyeL.setAttribute('ry',2+ratio*1);eyeR.setAttribute('ry',2+ratio*1);}
+  else if(dx<-40){eyeL.setAttribute('ry',2+ratio);eyeR.setAttribute('ry',2+ratio);}
   else{eyeL.setAttribute('ry',5);eyeR.setAttribute('ry',5);}
 }
 function onEnd(e){
@@ -321,8 +319,11 @@ function onEnd(e){
     const dir=curX>0?1:-1;
     card.style.transform=`translateX(${dir*110}vw) rotate(${dir*25}deg)`;
     setTimeout(()=>showResult(),300);
-  }else{card.style.transform='translateX(0) rotate(0deg) translateY(0)';}
+  }else{
+    card.style.transform='translateX(0) rotate(0deg) translateY(0)';
+  }
 }
+
 function showResult(){
   let r;
   const stored=localStorage.getItem(DAILY_RESULT_KEY);
@@ -333,9 +334,12 @@ function showResult(){
   document.getElementById('resultTitle').textContent=r.title;
   document.getElementById('resultMsg').textContent=r.msg;
   document.getElementById('resultComment').textContent=r.comment;
-  document.getElementById('resultDaily').textContent=r.daily;
+  document.getElementById('luckyColor').textContent=r.color;
+  document.getElementById('luckyNumber').textContent=r.number;
+  document.getElementById('luckyItem').textContent=r.item;
+  document.getElementById('luckyDir').textContent=r.dir;
   const rMouth=document.getElementById('rMouth');
-  if(rMouth)rMouth.setAttribute('d',r.mouthPath||"M55 80 Q60 85 65 80");
+  if(rMouth)rMouth.setAttribute('d',r.mouthPath||'M55 80 Q60 85 65 80');
   const ry=r.badge==='末吉'?3.5:5;
   const rEL=document.getElementById('rEyeL');const rER=document.getElementById('rEyeR');
   if(rEL)rEL.setAttribute('ry',ry);if(rER)rER.setAttribute('ry',ry);
@@ -343,6 +347,7 @@ function showResult(){
   setTimeout(()=>launchParticles(r.particles),100);
   if(count>=DAILY_LIMIT){document.getElementById('btnRetry').textContent='また明日ね 🐱';}
 }
+
 function launchParticles(emojis){
   const pc=document.getElementById('particles');pc.innerHTML='';
   for(let i=0;i<28;i++){
@@ -356,6 +361,7 @@ function launchParticles(emojis){
   }
   setTimeout(()=>{pc.innerHTML='';},3000);
 }
+
 document.getElementById('btnRetry').addEventListener('click',()=>{
   if(count>=DAILY_LIMIT){resultScreen.classList.remove('show');return;}
   resultScreen.classList.remove('show');
@@ -364,12 +370,16 @@ document.getElementById('btnRetry').addEventListener('click',()=>{
   eyeL.setAttribute('ry',5);eyeR.setAttribute('ry',5);
   setTimeout(()=>{card.style.transition='transform .45s cubic-bezier(.16,1,.3,1)';},50);
 });
+
 document.getElementById('btnShare').addEventListener('click',()=>{
   const badge=document.getElementById('resultBadge').textContent;
   const title=document.getElementById('resultTitle').textContent;
-  const text=`🐱 ねこみくじ結果\n${dateStr}の運勢：【${badge}】\n${title}\n#ねこみくじ #おみくじ`;
+  const color=document.getElementById('luckyColor').textContent;
+  const item=document.getElementById('luckyItem').textContent;
+  const text=`🐱 ねこみくじ結果\n${dateStr}の運勢：【${badge}】\n${title}\nラッキーカラー: ${color} / アイテム: ${item}\n#ねこみくじ #おみくじ`;
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`,'_blank');
 });
+
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js')
     .then(()=>console.log('SW registered'))
