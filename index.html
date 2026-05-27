@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#fff9f4">
-<meta name="description" content="猫カードをスワイプして今日の運勢を引こう！大吉・中吉・小吉・吉・末吉の5種類。毎日楽しめる日替わりおみくじゲーム🐱">
+<meta name="description" content="猫カードをスワイプして今日の運勢を引こう！大吉・中吉・小吉・吉・末吉の5種類。毎日楽しめる日替わりおみくじゲーム">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ねこみくじ">
-<meta property="og:title" content="ねこみくじ🐱">
+<meta property="og:title" content="ねこみくじ">
 <meta property="og:description" content="猫カードをスワイプして今日の運勢を引こう！毎日楽しめる日替わりおみくじゲーム">
 <meta property="og:image" content="https://keji-dev-jp.github.io/nekomikuji/icon-512.png">
 <meta property="og:url" content="https://keji-dev-jp.github.io/nekomikuji/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ねこみくじ🐱">
+<meta name="twitter:title" content="ねこみくじ">
 <meta name="twitter:description" content="猫カードをスワイプして今日の運勢を引こう！">
 <meta name="twitter:image" content="https://keji-dev-jp.github.io/nekomikuji/icon-512.png">
 <title>ねこみくじ</title>
@@ -34,8 +34,8 @@ html,body{height:100%;overflow:hidden;font-family:'M PLUS Rounded 1c','Hiragino 
 body{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:0 16px;
   background:radial-gradient(circle at 20% 10%,#ffe0cc55 0%,transparent 50%),radial-gradient(circle at 80% 90%,#ffd6b055 0%,transparent 50%),var(--bg);}
 header{width:100%;text-align:center;padding:20px 0 4px;}
-.logo{display:inline-flex;align-items:center;gap:8px;}
-.logo-icon{font-size:26px;line-height:1;}
+.logo{display:inline-flex;align-items:center;gap:10px;}
+.logo-cat-icon{width:28px;height:28px;flex-shrink:0;}
 .logo-text{font-size:clamp(22px,5vw,28px);font-weight:900;letter-spacing:.08em;color:var(--accent);}
 .tagline{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.1em;}
 .date-badge{display:inline-block;font-size:11px;color:var(--accent);background:rgba(232,132,90,.1);padding:4px 12px;border-radius:999px;margin-top:6px;font-weight:700;letter-spacing:.05em;}
@@ -59,16 +59,18 @@ footer{padding:0 0 24px;text-align:center;width:100%;}
 .swipe-arrow span{font-size:18px;}
 .guide-sep{width:1px;height:16px;background:rgba(0,0,0,.1);}
 .counter{font-size:11px;color:var(--text-muted);letter-spacing:.05em;}
+/* btn cat icon */
+.btn-cat-icon{width:20px;height:20px;vertical-align:middle;display:inline-block;}
 /* Tutorial */
 .tutorial-overlay{position:fixed;inset:0;background:rgba(40,20,10,.72);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .35s;}
 .tutorial-overlay.show{opacity:1;pointer-events:all;}
 .tutorial-box{background:var(--surface);border-radius:28px;padding:32px 24px;max-width:300px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);}
-.tutorial-icon{font-size:52px;margin-bottom:8px;}
+.tutorial-hero{width:64px;height:64px;margin:0 auto 12px;}
 .tutorial-title{font-size:20px;font-weight:900;color:var(--accent);margin-bottom:12px;}
 .tutorial-steps{list-style:none;text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
 .tutorial-steps li{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.6;color:var(--text);}
 .tutorial-steps li .step-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
-.btn-tutorial-start{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 40px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(232,132,90,.4);letter-spacing:.05em;transition:transform .15s;}
+.btn-tutorial-start{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 40px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(232,132,90,.4);letter-spacing:.05em;transition:transform .15s;display:inline-flex;align-items:center;gap:8px;}
 .btn-tutorial-start:active{transform:scale(.96);}
 /* Result */
 .result-screen{position:fixed;inset:0;background:radial-gradient(circle at 30% 20%,#ffe0cc66 0%,transparent 55%),radial-gradient(circle at 70% 80%,#ffd6b044 0%,transparent 55%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.16,1,.3,1);}
@@ -85,9 +87,9 @@ footer{padding:0 0 24px;text-align:center;width:100%;}
 .result-lucky-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:260px;}
 .lucky-item{background:rgba(232,132,90,.08);border-radius:12px;padding:8px 10px;font-size:11px;color:var(--text-muted);text-align:center;line-height:1.5;}
 .lucky-item strong{display:block;font-size:13px;font-weight:900;color:var(--accent);margin-top:2px;}
-.result-comment{font-size:13px;color:var(--accent);font-weight:700;background:rgba(232,132,90,.1);padding:8px 20px;border-radius:999px;}
+.result-comment{font-size:13px;color:var(--accent);font-weight:700;background:rgba(232,132,90,.1);padding:8px 20px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
-.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 36px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(232,132,90,.35);transition:transform .15s;}
+.btn-retry{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 32px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(232,132,90,.35);transition:transform .15s;display:inline-flex;align-items:center;gap:8px;}
 .btn-retry:active{transform:scale(.96);}
 .btn-share{background:#1d9bf0;color:#fff;border:none;border-radius:999px;padding:14px 28px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(29,155,240,.35);display:flex;align-items:center;gap:6px;transition:transform .15s;}
 .btn-share:active{transform:scale(.96);}
@@ -104,26 +106,94 @@ footer{padding:0 0 24px;text-align:center;width:100%;}
 <div class="deco-star" style="bottom:20%;left:5%;animation-delay:.5s">🍀</div>
 <div class="deco-star" style="bottom:25%;right:7%;animation-delay:1.5s">✨</div>
 
+<!-- オリジナルSVGシンボル定義 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- 小さい猫顔アイコン (ロゴ用) -->
+    <symbol id="icon-neko" viewBox="0 0 32 32">
+      <polygon points="4,14 8,4 13,14" fill="#f7c59f"/>
+      <polygon points="5.5,13 8,5 12,13" fill="#fde9d9"/>
+      <polygon points="19,14 24,4 28,14" fill="#f7c59f"/>
+      <polygon points="20,13 24,5 27,13" fill="#fde9d9"/>
+      <ellipse cx="16" cy="19" rx="12" ry="11" fill="#f7c59f"/>
+      <ellipse cx="11" cy="17" rx="2.2" ry="2.5" fill="white"/>
+      <ellipse cx="21" cy="17" rx="2.2" ry="2.5" fill="white"/>
+      <ellipse cx="11" cy="17.3" rx="1.4" ry="1.6" fill="#3d2b1f"/>
+      <ellipse cx="21" cy="17.3" rx="1.4" ry="1.6" fill="#3d2b1f"/>
+      <circle cx="11.5" cy="16.7" r="0.5" fill="white"/>
+      <circle cx="21.5" cy="16.7" r="0.5" fill="white"/>
+      <ellipse cx="16" cy="20.5" rx="1" ry="0.7" fill="#e8845a"/>
+      <path d="M14 22 Q16 23.5 18 22" stroke="#e8845a" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="9.5" cy="20.5" rx="2" ry="1.3" fill="#f4a0a0" opacity=".45"/>
+      <ellipse cx="22.5" cy="20.5" rx="2" ry="1.3" fill="#f4a0a0" opacity=".45"/>
+      <line x1="3" y1="19.5" x2="10" y2="20.5" stroke="#c9956a" stroke-width="0.6" stroke-linecap="round" opacity=".5"/>
+      <line x1="3" y1="21" x2="10" y2="21" stroke="#c9956a" stroke-width="0.6" stroke-linecap="round" opacity=".5"/>
+      <line x1="22" y1="20.5" x2="29" y2="19.5" stroke="#c9956a" stroke-width="0.6" stroke-linecap="round" opacity=".5"/>
+      <line x1="22" y1="21" x2="29" y2="21" stroke="#c9956a" stroke-width="0.6" stroke-linecap="round" opacity=".5"/>
+    </symbol>
+    <!-- にっこり猫アイコン (ボタン用) -->
+    <symbol id="icon-neko-smile" viewBox="0 0 28 28">
+      <polygon points="3,12 7,3 11,12" fill="#f7c59f"/>
+      <polygon points="4.5,11.5 7,4 10.5,11.5" fill="#fde9d9"/>
+      <polygon points="17,12 21,3 25,12" fill="#f7c59f"/>
+      <polygon points="17.5,11.5 21,4 24.5,11.5" fill="#fde9d9"/>
+      <ellipse cx="14" cy="17" rx="10.5" ry="9.5" fill="#f7c59f"/>
+      <ellipse cx="9.5" cy="15" rx="2" ry="2.2" fill="white"/>
+      <ellipse cx="18.5" cy="15" rx="2" ry="2.2" fill="white"/>
+      <!-- 目を細めた笑顔 (arc) -->
+      <path d="M8 15.5 Q9.5 13.5 11 15.5" stroke="#3d2b1f" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M17 15.5 Q18.5 13.5 20 15.5" stroke="#3d2b1f" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="14" cy="18.5" rx="1" ry="0.7" fill="#e8845a"/>
+      <path d="M12 20 Q14 22 16 20" stroke="#e8845a" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+      <ellipse cx="8" cy="18.5" rx="1.8" ry="1.1" fill="#f4a0a0" opacity=".4"/>
+      <ellipse cx="20" cy="18.5" rx="1.8" ry="1.1" fill="#f4a0a0" opacity=".4"/>
+    </symbol>
+    <!-- しょんぼり猫アイコン (末吉/また明日用) -->
+    <symbol id="icon-neko-sad" viewBox="0 0 28 28">
+      <polygon points="3,12 7,3 11,12" fill="#f7c59f"/>
+      <polygon points="4.5,11.5 7,4 10.5,11.5" fill="#fde9d9"/>
+      <polygon points="17,12 21,3 25,12" fill="#f7c59f"/>
+      <polygon points="17.5,11.5 21,4 24.5,11.5" fill="#fde9d9"/>
+      <ellipse cx="14" cy="17" rx="10.5" ry="9.5" fill="#f7c59f"/>
+      <ellipse cx="9.5" cy="15" rx="2" ry="2.2" fill="white"/>
+      <ellipse cx="18.5" cy="15" rx="2" ry="2.2" fill="white"/>
+      <ellipse cx="9.5" cy="15.3" rx="1.3" ry="1.4" fill="#3d2b1f"/>
+      <ellipse cx="18.5" cy="15.3" rx="1.3" ry="1.4" fill="#3d2b1f"/>
+      <circle cx="10" cy="14.7" r="0.45" fill="white"/>
+      <circle cx="19" cy="14.7" r="0.45" fill="white"/>
+      <ellipse cx="14" cy="18.5" rx="1" ry="0.7" fill="#e8845a"/>
+      <path d="M12 21 Q14 19.5 16 21" stroke="#e8845a" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+      <ellipse cx="8" cy="18.5" rx="1.8" ry="1.1" fill="#f4a0a0" opacity=".4"/>
+      <ellipse cx="20" cy="18.5" rx="1.8" ry="1.1" fill="#f4a0a0" opacity=".4"/>
+    </symbol>
+  </defs>
+</svg>
+
 <!-- Tutorial -->
 <div class="tutorial-overlay" id="tutorialOverlay">
   <div class="tutorial-box">
-    <div class="tutorial-icon">🐱</div>
+    <svg class="tutorial-hero" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <use href="#icon-neko-smile"/>
+    </svg>
     <div class="tutorial-title">ねこみくじの遊び方</div>
     <ul class="tutorial-steps">
       <li><span class="step-icon">🐾</span><span>猫カードを左右にスワイプするだけ！</span></li>
       <li><span class="step-icon">🍀</span><span>大吉・中吉・小吉・吉・末吉の5種類から今日の運勢が分かるにゃ</span></li>
       <li><span class="step-icon">📅</span><span>結果は1日同じ。自分の運勢を熱くシェアしてね！</span></li>
-      <li><span class="step-icon">🔁</span><span>1日3回まで引けるよ。また明日も来てね🐾</span></li>
+      <li><span class="step-icon">🔁</span><span>1日3回まで引けるよ。また明日も来てね</span></li>
     </ul>
-    <button class="btn-tutorial-start" id="btnTutorialStart">はじめる 🐱</button>
+    <button class="btn-tutorial-start" id="btnTutorialStart">
+      はじめる
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><use href="#icon-neko-smile"/></svg>
+    </button>
   </div>
 </div>
 
 <header>
   <div class="logo">
-    <span class="logo-icon">🐱</span>
+    <svg class="logo-cat-icon" viewBox="0 0 32 32" fill="none"><use href="#icon-neko"/></svg>
     <span class="logo-text">ねこみくじ</span>
-    <span class="logo-icon">🐱</span>
+    <svg class="logo-cat-icon" viewBox="0 0 32 32" fill="none"><use href="#icon-neko"/></svg>
   </div>
   <p class="tagline">スワイプして今日の運勢を引こう</p>
   <div class="date-badge" id="dateBadge"></div>
@@ -198,9 +268,15 @@ footer{padding:0 0 24px;text-align:center;width:100%;}
       <div class="lucky-item">🧇 アイテム<strong id="luckyItem"></strong></div>
       <div class="lucky-item">🧭 方向<strong id="luckyDir"></strong></div>
     </div>
-    <div class="result-comment" id="resultComment"></div>
+    <div class="result-comment" id="resultComment">
+      <svg width="18" height="18" viewBox="0 0 28 28" fill="none" id="commentIcon"><use href="#icon-neko-smile"/></svg>
+      <span id="resultCommentText"></span>
+    </div>
     <div class="btn-row">
-      <button class="btn-retry" id="btnRetry">もう一回 🐱</button>
+      <button class="btn-retry" id="btnRetry">
+        もう一回
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" id="btnRetryIcon"><use href="#icon-neko-smile"/></svg>
+      </button>
       <button class="btn-share" id="btnShare">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.626zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         Xでシェア
@@ -215,27 +291,27 @@ footer{padding:0 0 24px;text-align:center;width:100%;}
 const RESULTS=[
   {badge:"大吉",title:"今日は最高の一日！",
    msg:"何事にもチャレンジする勇気が運を呼び込む。\n気になっていたことを思い切ってやってみよう。",
-   comment:"にゃん！最高の運勢だにゃ🐾",
+   comment:"最高の運勢だにゃ",mood:"smile",
    color:"ゴールド",number:"7",item:"黄色い花",dir:"南",
    particles:["🌟","⭐","✨","🎉","🌸","💛"],weight:1,mouthPath:"M53 79 Q60 86 67 79"},
   {badge:"中吉",title:"いい流れが来ているよ",
    msg:"焦らず丁寧に進めれば良い結果が出る。\n大切な人との時間が運気を上げてくれる。",
-   comment:"まあまあ良い日だにゃ🐾",
+   comment:"まあまあ良い日だにゃ",mood:"smile",
    color:"ピンク",number:"3",item:"マグカップ",dir:"東",
    particles:["🌸","💫","🍀","✨"],weight:2,mouthPath:"M54 80 Q60 86 66 80"},
   {badge:"小吉",title:"小さな幸せを見つけよう",
    msg:"いつもより少しだけ周りに目を向けてみて。\n小さな気づきが今日の宝物になるかも。",
-   comment:"ちょっぴり良い日だにゃ🐾",
+   comment:"ちょっぴり良い日だにゃ",mood:"smile",
    color:"グリーン",number:"5",item:"辛いもの",dir:"北",
    particles:["🍀","🌿","💚","🌱"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
   {badge:"吉",title:"穏やかな一日になりそう",
    msg:"無理をせず、自分のペースで過ごすのが吉。\nいつもの行動が良い縁を運んでくる。",
-   comment:"普通の日も悪くないにゃ🐾",
+   comment:"普通の日も悪くないにゃ",mood:"smile",
    color:"イエロー",number:"1",item:"まるいもの",dir:"西",
    particles:["🌼","💛","☀️","🌻"],weight:2,mouthPath:"M55 80 Q60 85 65 80"},
   {badge:"末吉",title:"ゆっくり準備を整えよう",
    msg:"今は焦らず、内側を整える時期。\n基礎を固めることが後の大きな花につながる。",
-   comment:"今日はゆっくりにゃ🐾",
+   comment:"今日はゆっくりにゃ",mood:"sad",
    color:"ラベンダー",number:"9",item:"水",dir:"上",
    particles:["🌙","💤","⭐","🌧️"],weight:1,mouthPath:"M56 82 Q60 79 64 82"}
 ];
@@ -256,21 +332,17 @@ const DAILY_LIMIT=3;
 let count=parseInt(localStorage.getItem(COUNT_KEY)||'0');
 document.getElementById('counter').textContent=`今日のおみくじ: ${count}回目`;
 if(count>=DAILY_LIMIT){
-  document.getElementById('cardTitle').textContent='また明日来てにゃ🐾';
+  document.getElementById('cardTitle').textContent='また明日来てにゃ';
   document.getElementById('cardSub').textContent=`おみくじは1日${DAILY_LIMIT}回まで。\nまた明日！`;
 }
 
-// Tutorial: show only first visit
 const tutorialOverlay=document.getElementById('tutorialOverlay');
-if(!localStorage.getItem(TUTORIAL_KEY)){
-  tutorialOverlay.classList.add('show');
-}
+if(!localStorage.getItem(TUTORIAL_KEY))tutorialOverlay.classList.add('show');
 document.getElementById('btnTutorialStart').addEventListener('click',()=>{
   localStorage.setItem(TUTORIAL_KEY,'1');
   tutorialOverlay.classList.remove('show');
 });
 
-// Swipe
 let startX=0,startY=0,curX=0,isDragging=false;
 const card=document.getElementById('card');
 const eyeL=document.getElementById('eyeL');
@@ -279,8 +351,6 @@ const labelLeft=document.getElementById('labelLeft');
 const labelRight=document.getElementById('labelRight');
 const counter=document.getElementById('counter');
 const resultScreen=document.getElementById('resultScreen');
-
-// 動的スワイプ閾値: 画面幅の約20%（最小50px、最大100px）
 const SWIPE_THRESHOLD=Math.min(Math.max(window.innerWidth*0.2,50),100);
 
 card.addEventListener('touchstart',onStart,{passive:true});
@@ -333,11 +403,20 @@ function showResult(){
   document.getElementById('resultBadge').textContent=r.badge;
   document.getElementById('resultTitle').textContent=r.title;
   document.getElementById('resultMsg').textContent=r.msg;
-  document.getElementById('resultComment').textContent=r.comment;
+  document.getElementById('resultCommentText').textContent=r.comment;
   document.getElementById('luckyColor').textContent=r.color;
   document.getElementById('luckyNumber').textContent=r.number;
   document.getElementById('luckyItem').textContent=r.item;
   document.getElementById('luckyDir').textContent=r.dir;
+  // コメントアイコン切り替え
+  const iconHref=r.mood==='sad'?'#icon-neko-sad':'#icon-neko-smile';
+  document.getElementById('commentIcon').querySelector('use').setAttribute('href',iconHref);
+  // ボタンアイコン切り替え
+  const btnIcon=document.getElementById('btnRetryIcon').querySelector('use');
+  if(count>=DAILY_LIMIT){
+    btnIcon.setAttribute('href','#icon-neko-sad');
+    document.getElementById('btnRetry').childNodes[0].textContent='また明日ね ';
+  }
   const rMouth=document.getElementById('rMouth');
   if(rMouth)rMouth.setAttribute('d',r.mouthPath||'M55 80 Q60 85 65 80');
   const ry=r.badge==='末吉'?3.5:5;
@@ -345,7 +424,6 @@ function showResult(){
   if(rEL)rEL.setAttribute('ry',ry);if(rER)rER.setAttribute('ry',ry);
   resultScreen.classList.add('show');
   setTimeout(()=>launchParticles(r.particles),100);
-  if(count>=DAILY_LIMIT){document.getElementById('btnRetry').textContent='また明日ね 🐱';}
 }
 
 function launchParticles(emojis){
@@ -376,7 +454,7 @@ document.getElementById('btnShare').addEventListener('click',()=>{
   const title=document.getElementById('resultTitle').textContent;
   const color=document.getElementById('luckyColor').textContent;
   const item=document.getElementById('luckyItem').textContent;
-  const text=`🐱 ねこみくじ結果\n${dateStr}の運勢：【${badge}】\n${title}\nラッキーカラー: ${color} / アイテム: ${item}\n#ねこみくじ #おみくじ`;
+  const text=`ねこみくじ結果\n${dateStr}の運勢：【${badge}】\n${title}\nラッキーカラー: ${color} / アイテム: ${item}\n#ねこみくじ #おみくじ`;
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`,'_blank');
 });
 
