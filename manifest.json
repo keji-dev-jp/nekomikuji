@@ -1,7 +1,7 @@
 {
   "name": "ねこみくじ",
   "short_name": "ねこみくじ",
-  "description": "スワイプして今日の運勢を引こう🐱",
+  "description": "猫カードをスワイプして今日の運勢を引こう！日替わりおみくじゲーム🐱",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fff9f4",
